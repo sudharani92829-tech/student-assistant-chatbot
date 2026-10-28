@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Assistant Chatbot</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #cccccc;
+        }
+
+        h1 {
+            text-align: center;
+            color: #3730a3;
+        }
+
+        #chat {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dddddd;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .message {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .user {
+            background: #dbeafe;
+        }
+
+        .bot {
+            background: #dcfce7;
+        }
+
+        input, select, button {
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid #cccccc;
+        }
+
+        select, button {
+            border: none;
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+        }
+
+        #send {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>🎓 Student Assistant Chatbot</h1>
+    <p>Ask questions or generate a quiz to help you study.</p>
+
+    <div id="chat" aria-live="polite">
+        <div class="message bot">
+            Hello! Ask me a question or generate a quiz.
+        </div>
+    </div>
+
+    <form id="chatForm">
+        <select id="mode">
+            <option value="chat">Ask a question</option>
+            <option value="quiz">Generate a quiz</option>
+        </select>
+
+        <input
+            id="message"
+            type="text"
+            placeholder="Type your question or quiz topic..."
+            required
+        >
+
+        <button id="send" type="submit">Send</button>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("chatForm");
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("message");
+    const sendButton = document.getElementById("send");
+
+    function addMessage(text, sender) {
+        const div = document.createElement("div");
+        div.className = "message " + sender;
+        div.textContent = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
+        return div;
+    }
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const message = input.value.trim();
+        const mode = document.getElementById("mode").value;
+
+        if (!message) return;
+
+        addMessage("You: " + message, "user");
+        input.value = "";
+        sendButton.disabled = true;
+
+        const waiting = addMessage("Thinking...", "bot");
+
+        try {
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message,
+                    mode: mode
+                })
+            });
+
+            const data = await response.json();
+            waiting.textContent = "Assistant: " + (data.reply || "No reply received.");
+
+        } catch (error) {
+            waiting.textContent =
+                "Could not connect to the chatbot server. Please try again.";
+        } finally {
+            sendButton.disabled = false;
+            input.focus();
+        }
+    });
+</script>
+</body>
+</html>
