@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 650px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+h1 {
+    text-align: center;
+    color: #4338ca;
+}
+
+p {
+    text-align: center;
+    color: #555;
+}
+
+#chat {
+    height: 320px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.message {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.user {
+    background: #dbeafe;
+}
+
+.bot {
+    background: #dcfce7;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+input, select {
+    border: 1px solid #ccc;
+}
+
+button {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #3730a3;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
